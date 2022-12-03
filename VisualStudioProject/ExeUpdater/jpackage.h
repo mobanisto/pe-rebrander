@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, 2020, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2011, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,54 +23,20 @@
  * questions.
  */
 
-#ifndef JNIUTILS_H
-#define JNIUTILS_H
-
-#include <memory>
-#include "jni.h"
+#include "ResourceEditor.h"
+#include "IconSwap.h"
+#include "VersionInfo.h"
 #include "tstrings.h"
 
+#ifndef JPACKAGE_H
+#define JPACKAGE_H
 
-namespace jni {
+    HANDLE ExecutableRebrander_lockResource(std::wstring executable);
 
-struct JniObjWithEnv {
-    JniObjWithEnv(): env(0), obj(0) {
+    void ExecutableRebrander_unlockResource(HANDLE resourceLock);
 
-    }
+    int ExecutableRebrander_iconSwap(HANDLE resourceLock, std::wstring iconTarget);
 
-    JniObjWithEnv(JNIEnv *env, jobject obj) : env(env), obj(obj) {
-    }
+    int ExecutableRebrander_versionSwap(HANDLE resourceLock, tstring_array props);
 
-    bool operator == (const JniObjWithEnv& other) const {
-        return env == other.env && obj == other.obj;
-    }
-
-    bool operator != (const JniObjWithEnv& other) const {
-        return ! operator == (other);
-    }
-
-    explicit operator bool() const {
-        return env && obj;
-    }
-
-    JNIEnv *env;
-    jobject obj;
-
-    struct LocalRefDeleter {
-        typedef JniObjWithEnv pointer;
-
-        void operator()(pointer v);
-    };
-};
-
-typedef std::unique_ptr<JniObjWithEnv, JniObjWithEnv::LocalRefDeleter> LocalRef;
-
-tstring toUnicodeString(JNIEnv *env, jstring val);
-
-jstring toJString(JNIEnv *env, const tstring& val);
-
-tstring_array toUnicodeStringArray(JNIEnv *env, jobjectArray val);
-
-} // namespace jni
-
-#endif // JNIUTILS_H
+#endif // JPACKAGE_H

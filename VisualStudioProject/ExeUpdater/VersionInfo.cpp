@@ -42,10 +42,10 @@ public:
     FixedFileVersion(const std::wstring& value) {
         if (4 != swscanf_s(value.c_str(), L"%d.%d.%d.%d", components + 0,
                 components + 1, components + 2, components + 3)) {
-            JP_THROW(tstrings::any()
+            JP_THROW((tstrings::any()
                     << "Malformed file version value: ["
                     << value
-                    << "]");
+                    << "]").str());
             forEach(components, [&value](int component) -> void {
                 if (USHRT_MAX < component) {
                     JP_THROW(tstrings::any()
@@ -115,8 +115,6 @@ public:
     }
 
     ~StreamSize() {
-        JP_TRY;
-
         const std::streampos curPos = stream.tellp();
         const std::streampos size = curPos - anchor;
         stream.seekp(anchor);
@@ -125,8 +123,6 @@ public:
         }
         writeWORD(stream, (size_t) size);
         stream.seekp(curPos);
-
-        JP_CATCH_ALL;
     }
 
 private:

@@ -26,15 +26,13 @@
 #include <algorithm>
 #include <fstream>
 #include "ResourceEditor.h"
-#include "WinErrorHandling.h"
-#include "Log.h"
+#include "ErrorHandling.h"
 
 
 ResourceEditor::FileLock::FileLock(const std::wstring& binaryPath) {
     h = BeginUpdateResource(binaryPath.c_str(), FALSE);
     if (NULL == h) {
-        JP_THROW(SysError(tstrings::any() << "BeginUpdateResource("
-                    << binaryPath << ") failed", BeginUpdateResource));
+        JP_THROW(tstrings::any() << "BeginUpdateResource(" << binaryPath << ") failed");
     }
 
     ownHandle(true);
@@ -50,8 +48,7 @@ ResourceEditor::FileLock::FileLock(HANDLE h): h(h) {
 
 ResourceEditor::FileLock::~FileLock() {
     if (theOwnHandle && !EndUpdateResource(h, theDiscard)) {
-        JP_NO_THROW(JP_THROW(SysError(tstrings::any()
-            << "EndUpdateResource(" << h << ") failed.", EndUpdateResource)));
+        std::cout << "EndUpdateResource(" << h << ") failed." << std::endl;
     }
 }
 
@@ -115,7 +112,7 @@ ResourceEditor& ResourceEditor::apply(const FileLock& dstBinary,
     auto reply = UpdateResource(dstBinary.get(), theTypePtr, theIdPtr, lang,
                                 buf.data(), static_cast<DWORD>(buf.size()));
     if (reply == FALSE) {
-        JP_THROW(SysError("UpdateResource() failed", UpdateResource));
+        JP_THROW("UpdateResource() failed");
     }
 
     return *this;

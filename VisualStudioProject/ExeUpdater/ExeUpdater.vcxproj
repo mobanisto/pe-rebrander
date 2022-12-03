@@ -127,7 +127,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="IconSwap.cpp" />
+    <ClCompile Include="jpackage.cpp" />
+    <ClCompile Include="ResourceEditor.cpp" />
     <ClCompile Include="Test.cpp" />
+    <ClCompile Include="tstrings.cpp" />
+    <ClCompile Include="VersionInfo.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ErrorHandling.h" />
+    <ClInclude Include="IconSwap.h" />
+    <ClInclude Include="jpackage.h" />
+    <ClInclude Include="ResourceEditor.h" />
+    <ClInclude Include="Toolbox.h" />
+    <ClInclude Include="tstrings.h" />
+    <ClInclude Include="VersionInfo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

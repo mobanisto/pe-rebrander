@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, 2020, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2019, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,42 +23,24 @@
  * questions.
  */
 
-#include "ResourceEditor.h"
-#include "IconSwap.h"
-#include "VersionInfo.h"
+#ifndef ErrorHandling_h
+#define ErrorHandling_h
+
+
+#include <stdexcept>
+
 #include "tstrings.h"
 
-HANDLE ExecutableRebrander_lockResource(std::wstring executable) {
-    return ResourceEditor::FileLock(executable).ownHandle(false).get();
+inline std::runtime_error makeException(
+    const tstrings::any& msg) {
+    return std::runtime_error(msg.str());
 }
 
-void ExecutableRebrander_unlockResource(HANDLE resourceLock) {
-    ResourceEditor::FileLock(resourceLock).ownHandle(true);
+inline std::runtime_error makeException(
+    std::string::const_pointer msg) {
+    return std::runtime_error(msg);
 }
 
-int ExecutableRebrander_iconSwap(HANDLE resourceLock, std::wstring iconTarget) {
-    const ResourceEditor::FileLock lock(resourceLock);
+#define JP_THROW(e) throw makeException(e)
 
-    if (ChangeIcon(lock.get(), iconTarget)) {
-        return 0;
-    }
-
-    return 1;
-}
-
-int ExecutableRebrander_versionSwap(HANDLE resourceLock, tstring_array props) {
-    VersionInfo vi;
-
-    tstring_array::const_iterator it = props.begin();
-    tstring_array::const_iterator end = props.end();
-    for (; it != end; ++it) {
-        const tstring name = *it;
-        const tstring value = *++it;
-        vi.setProperty(name, value);
-    }
-
-    const ResourceEditor::FileLock lock(resourceLock);
-    vi.apply(lock);
-
-    return 0;
-}
+#endif // #ifndef ErrorHandling_h
