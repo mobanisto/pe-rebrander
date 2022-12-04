@@ -131,7 +131,7 @@
     <ClCompile Include="IconSwap.cpp" />
     <ClCompile Include="jpackage.cpp" />
     <ClCompile Include="ResourceEditor.cpp" />
-    <ClCompile Include="Test.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="tstrings.cpp" />
     <ClCompile Include="VersionInfo.cpp" />
   </ItemGroup>
