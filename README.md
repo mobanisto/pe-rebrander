@@ -1,6 +1,6 @@
-# PE-rebrander
+# PE-Rebrander
 
-PE-rebrander is a tool for rebranding Portable Executable (PE) files such
+PE-Rebrander is a tool for rebranding Portable Executable (PE) files such
 as `.exe` or `.dll` files.
 This software is based on the native code from OpenJDK's JPackage.
 It has been copied from [openjdk/jdk](https://github.com/openjdk/jdk) at

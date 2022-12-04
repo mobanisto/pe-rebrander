@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
 
 
     if (argc < 2) {
-        std::cout << "Usage: ExeUpdater <exe> [options]" << std::endl;
+        std::cout << "Usage: PE-Rebrander <exe> [options]" << std::endl;
         std::cout << "  --icon <ico file>" << std::endl;
         for (int i = 0; i < sizeof(optionProperties) / sizeof(OptionProperty); i++) {
             OptionProperty op = optionProperties[i];
