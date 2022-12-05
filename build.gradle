@@ -1,5 +1,5 @@
 task distZip(type: Zip) {
-   from('PE-Rebrander/x64/Release') {
+   from('PE-Rebrander/Release') {
        include 'PE-Rebrander.exe'
    }
    from('.') {
