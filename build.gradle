@@ -1,11 +1,39 @@
+def version = '1.0.0'
+
+task copyExe(type: Copy) {
+    group 'Build'
+    description 'Copy exe from Visual Studio build directory to Gradle build directory'
+    from('PE-Rebrander/Release') {
+        include 'PE-Rebrander.exe'
+    }
+    into 'build/exe'
+}
+
+task rebrandExe(type: Exec) {
+    group 'Build'
+    description 'Rebrand executable itself'
+    dependsOn(copyExe)
+    commandLine './PE-Rebrander/Release/PE-Rebrander.exe',
+        'build/exe/PE-Rebrander.exe',
+        '--file-version', "$version.0",
+        '--product-version', "$version",
+        '--company-name', 'Mobanisto',
+        '--product-name', 'PE-Rebrander',
+        '--legal-copyright', 'Mobanisto UG (haftungsbeschränkt)',
+        '--file-description', 'Portable Executable Rebrander'
+}
+
 task distZip(type: Zip) {
-   from('PE-Rebrander/Release') {
-       include 'PE-Rebrander.exe'
-   }
-   from('.') {
-       include 'README.md'
-       include 'LICENSE'
-   }
-   archiveName 'PE-rebrander.zip'
-   destinationDir(file('build'))
+    group 'Build'
+    description 'Bundle zip for distribution'
+    dependsOn(rebrandExe)
+    from('build/exe') {
+        include 'PE-Rebrander.exe'
+    }
+    from('.') {
+        include 'README.md'
+        include 'LICENSE'
+    }
+    archiveName "PE-Rebrander-${version}.zip"
+    destinationDir(file('build/zip'))
 }
