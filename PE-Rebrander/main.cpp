@@ -37,34 +37,39 @@ BOOL FileExists(LPCTSTR szPath)
         !(dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
 }
 
+OptionProperty optionProperties[] = {
+    {L"--file-version", L"FIXEDFILEINFO_FileVersion", L"FIXEDFILEINFO_ProductVersion"},
+    {L"--company-name", L"CompanyName", L""},
+    {L"--file-description", L"FileDescription", L""},
+    {L"--internal-name", L"InternalName", L""},
+    {L"--legal-copyright", L"LegalCopyright", L""},
+    {L"--original-filename", L"OriginalFilename", L""},
+    {L"--product-name", L"ProductName", L""},
+    {L"--product-version", L"ProductVersion", L"FileVersion"},
+};
+
+void printUsage()
+{
+    std::cout << "Usage: PE-Rebrander <exe> [options]" << std::endl;
+    std::cout << "  --icon <ico file>" << std::endl;
+    for (int i = 0; i < sizeof(optionProperties) / sizeof(OptionProperty); i++) {
+        OptionProperty op = optionProperties[i];
+        if (op.property2.empty()) {
+            std::cout << "  " << op.option << " <arg> (sets " << op.property1
+                << " property)" << std::endl;
+        }
+        else {
+            std::cout << "  " << op.option << " <arg> (sets " << op.property1
+                << " and " << op.property2 << " properties)" << std::endl;
+        }
+    }
+}
+
 int main(int argc, char* argv[])
 {
-    OptionProperty optionProperties[] = {
-        {L"--file-version", L"FIXEDFILEINFO_FileVersion", L"FIXEDFILEINFO_ProductVersion"},
-        {L"--company-name", L"CompanyName", L""},
-        {L"--file-description", L"FileDescription", L""},
-        {L"--internal-name", L"InternalName", L""},
-        {L"--legal-copyright", L"LegalCopyright", L""},
-        {L"--original-filename", L"OriginalFilename", L""},
-        {L"--product-name", L"ProductName", L""},
-        {L"--product-version", L"ProductVersion", L"FileVersion"},
-    };
-
 
     if (argc < 2) {
-        std::cout << "Usage: PE-Rebrander <exe> [options]" << std::endl;
-        std::cout << "  --icon <ico file>" << std::endl;
-        for (int i = 0; i < sizeof(optionProperties) / sizeof(OptionProperty); i++) {
-            OptionProperty op = optionProperties[i];
-            if (op.property2.empty()) {
-                std::cout << "  " << op.option << " <arg> (sets " << op.property1
-                    << " property)" << std::endl;
-            }
-            else {
-                std::cout << "  " << op.option << " <arg> (sets " << op.property1
-                    << " and " << op.property2 << " properties)" << std::endl;
-            }
-        }
+        printUsage();
         return 1;
     }
 
@@ -77,6 +82,18 @@ int main(int argc, char* argv[])
 
     // The properties we're going to update
     tstring_array props;
+
+    for (int c = 1; c < argc; c++) {
+        std::wstring option = tstrings::winStringToUtf16(argv[c]);
+        if (option.compare(L"--version") == 0) {
+            std::cout << "PE-Rebrander version 1.0.0" << std::endl;
+            return 0;
+        }
+        else if (option.compare(L"--help") == 0) {
+            printUsage();
+            return 0;
+        }
+    }
 
     for (int c = 2; c + 1 < argc; c += 2) {
         std::wstring option = tstrings::winStringToUtf16(argv[c]);
