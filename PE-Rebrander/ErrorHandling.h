@@ -41,6 +41,6 @@ inline std::runtime_error makeException(
     return std::runtime_error(msg);
 }
 
-#define JP_THROW(e) throw makeException(e)
+#define JP_THROW(e) std::cout << e << std::endl; throw makeException(e)
 
 #endif // #ifndef ErrorHandling_h
