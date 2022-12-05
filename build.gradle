@@ -15,6 +15,7 @@ task rebrandExe(type: Exec) {
     dependsOn(copyExe)
     commandLine './PE-Rebrander/Release/PE-Rebrander.exe',
         'build/exe/PE-Rebrander.exe',
+        '--icon', 'icon/icon.ico',
         '--file-version', "$version.0",
         '--product-version', "$version",
         '--company-name', 'Mobanisto',
