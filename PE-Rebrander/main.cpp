@@ -29,6 +29,14 @@ struct OptionProperty {
     std::wstring property2;
 };
 
+BOOL FileExists(LPCTSTR szPath)
+{
+    DWORD dwAttrib = GetFileAttributes(szPath);
+
+    return (dwAttrib != INVALID_FILE_ATTRIBUTES &&
+        !(dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
+}
+
 int main(int argc, char* argv[])
 {
     OptionProperty optionProperties[] = {
@@ -99,8 +107,17 @@ int main(int argc, char* argv[])
 
     std::cout << "Executable: " << executable << std::endl;
 
+    if (!FileExists(executable.c_str())) {
+        std::cout << "executable file not found" << std::endl;
+        return 1;
+    }
+
     if (changeIcon) {
         std::cout << "Changing executable icon: " << icon << std::endl;
+        if (!FileExists(icon.c_str())) {
+            std::cout << "icon file not found" << std::endl;
+            return 1;
+        }
     }
     else {
         std::cout << "Not changing executable icon" << std::endl;
