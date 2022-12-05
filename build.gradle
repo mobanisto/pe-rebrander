@@ -1,0 +1,11 @@
+task distZip(type: Zip) {
+   from('PE-Rebrander/x64/Release') {
+       include 'PE-Rebrander.exe'
+   }
+   from('.') {
+       include 'README.md'
+       include 'LICENSE'
+   }
+   archiveName 'PE-rebrander.zip'
+   destinationDir(file('build'))
+}
